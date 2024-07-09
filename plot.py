@@ -32,11 +32,11 @@ def plot_all(time_arr_list, loss_arr_list, dL_dt_arr_list, label_list, n_epoch=3
         plt.fill_between(np.arange(n_epoch), loss_mean_list[i]-loss_std_list[i], loss_mean_list[i]+loss_std_list[i], alpha=0.5)
     plt.xlabel('Epoch', fontsize=26)
     plt.ylabel('Loss', fontsize=26)
-    plt.yscale('log')
+    #plt.yscale('log')
     plt.xticks(xticks, fontsize= 20)
     plt.yticks(fontsize= 20)
     plt.legend(fontsize=17)
-    plt.savefig(loc + '/multi_layer_loss.pdf', bbox_inches='tight')
+    plt.savefig(loc + '/loss_vs_epoch.pdf', bbox_inches='tight')
 
     # plot loss vs wall-clock time
     plt.figure()
@@ -51,7 +51,7 @@ def plot_all(time_arr_list, loss_arr_list, dL_dt_arr_list, label_list, n_epoch=3
     plt.yticks(fontsize= 20)
     plt.yscale('log')
     plt.legend(fontsize=17)
-    plt.savefig(loc + '/multi_layer_loss_vs_time.pdf', bbox_inches='tight')
+    plt.savefig(loc + '/loss_vs_time.pdf', bbox_inches='tight')
 
     # plot loss vs dL/dt
     plt.figure()
@@ -64,7 +64,7 @@ def plot_all(time_arr_list, loss_arr_list, dL_dt_arr_list, label_list, n_epoch=3
     plt.xticks(fontsize= 20)
     plt.yticks([1e1, 1e3, 1e5, 1e7], fontsize= 20)
     plt.legend(fontsize=17)
-    plt.savefig(loc + '/multi_layer_loss_vs_gradient.pdf', bbox_inches='tight')
+    plt.savefig(loc + '/loss_vs_gradient.pdf', bbox_inches='tight')
 
     # plot dL/dt vs epoch
     plt.figure()
@@ -79,6 +79,6 @@ def plot_all(time_arr_list, loss_arr_list, dL_dt_arr_list, label_list, n_epoch=3
     plt.xticks(xticks, fontsize= 20)
     plt.yticks(fontsize= 20)
     plt.legend(fontsize=17)
-    plt.savefig(loc + '/multi_layer_gradient.pdf', bbox_inches='tight')
+    plt.savefig(loc + '/gradient_vs_epoch.pdf', bbox_inches='tight')
 
     return

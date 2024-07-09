@@ -4,6 +4,47 @@ import numpy as np
 import torch
 from torch import nn
 
+def rotate(x, theta, h, h_inv):
+    """SO(2) group action on a 2D vector.
+
+    Args:
+        x: the vector acted upon
+        theta: the angle by which to rotate the vector
+        
+    Returns:
+        the rotated vector
+    """
+    R_theta = torch.vstack(( \
+            torch.cat(( (torch.cos(theta)).view(1), (-torch.sin(theta)).view(1) )), \
+            torch.cat(( (torch.sin(theta)).view(1), (torch.cos(theta)).view(1)))))
+    return h_inv(torch.matmul(R_theta, h(x)))
+
+
+def exact_teleport(x, h, h_inv, lr_theta=1e-2):
+    """Teleportation on a function with SO(2) symmetry.
+
+    Args:
+        x: the vector acted upon
+        lr_theta: A scalar. Learning rate used in optimizing the group element.
+
+    Returns:
+        the teleported vector
+    """
+    theta = torch.tensor(np.random.random() * np.pi, requires_grad=True)
+    for theta_step in range(100):
+        gx = rotate(x, theta, h, h_inv)
+
+        L = torch.norm(h(gx))**2
+        grad, = torch.autograd.grad(L, inputs=gx, create_graph=True)
+        grad_norm = torch.norm(grad)
+        theta_grad, = torch.autograd.grad(grad_norm, inputs=theta)
+
+        theta = theta + lr_theta * theta_grad
+
+    x = torch.tensor(gx.detach().numpy(), requires_grad=True)
+
+    return x
+
 sigma = nn.LeakyReLU(0.1)
 sigma_inv = nn.LeakyReLU(10)
 
